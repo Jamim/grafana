@@ -264,6 +264,10 @@ function($, _) {
     return formatted;
   };
 
+  kbn.toPretty = function(value) {
+    return (parseFloat(value) || 0).toLocaleString('en-US');
+  };
+
   kbn.toFixedScaled = function(value, decimals, scaledDecimals, additionalDecimals, ext) {
     if (scaledDecimals === null) {
       return kbn.toFixed(value, decimals) + ext;
@@ -362,10 +366,11 @@ function($, _) {
   ///// VALUE FORMATS /////
 
   // Dimensionless Units
-  kbn.valueFormats.none  = kbn.toFixed;
-  kbn.valueFormats.short = kbn.formatBuilders.scaledUnits(1000, ['', ' K', ' Mil', ' Bil', ' Tri', ' Quadr', ' Quint', ' Sext', ' Sept']);
-  kbn.valueFormats.dB    = kbn.formatBuilders.fixedUnit('dB');
-  kbn.valueFormats.ppm   = kbn.formatBuilders.fixedUnit('ppm');
+  kbn.valueFormats.none   = kbn.toFixed;
+  kbn.valueFormats.short  = kbn.formatBuilders.scaledUnits(1000, ['', ' K', ' Mil', ' Bil', ' Tri', ' Quadr', ' Quint', ' Sext', ' Sept']);
+  kbn.valueFormats.pretty = kbn.toPretty;
+  kbn.valueFormats.dB     = kbn.formatBuilders.fixedUnit('dB');
+  kbn.valueFormats.ppm    = kbn.formatBuilders.fixedUnit('ppm');
 
   kbn.valueFormats.percent = function(size, decimals) {
     if (size === null) { return ""; }
@@ -709,6 +714,7 @@ function($, _) {
         submenu: [
           {text: 'none' ,               value: 'none'       },
           {text: 'short',               value: 'short'      },
+          {text: 'pretty',              value: 'pretty'     },
           {text: 'percent (0-100)',     value: 'percent'    },
           {text: 'percent (0.0-1.0)',   value: 'percentunit'},
           {text: 'Humidity (%H)',       value: 'humidity'   },
