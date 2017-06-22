@@ -9,7 +9,7 @@ describe("rangeUtil", () => {
   describe("Can get range grouped list of ranges", () => {
     it('when custom settings should return default range list', () => {
       var groups = rangeUtil.getRelativeTimesList({time_options: []}, 'Last 5 minutes');
-      expect(_.keys(groups).length).to.be(4);
+      expect(_.keys(groups).length).to.be(5);
       expect(groups[3][0].active).to.be(true);
     });
   });
