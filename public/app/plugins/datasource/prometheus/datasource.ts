@@ -138,6 +138,12 @@ export function PrometheusDatasource(instanceSettings, $q, backendSrv, templateS
       throw { message: 'Invalid time range' };
     }
 
+    // dirty hack to fix time lag in Pie Chart
+    if (query.expr.startsWith('scalar(sum(sum_over_time(')) {
+      start += query.step;
+      end += query.step-1;
+    }
+
     var url = '/api/v1/query_range?query=' + encodeURIComponent(query.expr) + '&start=' + start + '&end=' + end + '&step=' + query.step;
     return this._request('GET', url, query.requestId);
   };
