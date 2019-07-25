@@ -1,7 +1,6 @@
 import { isBoolean, isNumber, sortedUniq, sortedIndexOf, unescape as htmlUnescaped } from 'lodash';
 import moment from 'moment';
 import { saveAs } from 'file-saver';
-import { isNullOrUndefined } from 'util';
 
 const DEFAULT_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm:ssZ';
 const POINT_TIME_INDEX = 1;
@@ -43,12 +42,15 @@ function formatSpecialHeader(useExcelHeader) {
 }
 
 function formatRow(row, addEndRowDelimiter = true) {
+  // this function keeps cells empty for null and undefined values
+
   let text = '';
   for (let i = 0; i < row.length; i += 1) {
-    if (isBoolean(row[i]) || isNumber(row[i]) || isNullOrUndefined(row[i])) {
-      text += row[i];
-    } else {
-      text += `${QUOTE}${csvEscaped(htmlUnescaped(htmlDecoded(row[i])))}${QUOTE}`;
+    const value = row[i];
+    if (isBoolean(value) || isNumber(value)) {
+      text += value;
+    } else if (value !== null && value !== undefined) {
+      text += `${QUOTE}${csvEscaped(htmlUnescaped(htmlDecoded(value)))}${QUOTE}`;
     }
 
     if (i < row.length - 1) {
